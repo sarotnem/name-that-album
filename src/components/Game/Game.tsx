@@ -1,7 +1,7 @@
 'use client';
 import { useGameStore } from '@/providers/game-store-provider';
 import AlbumCover from './AlbumCover';
-import Details from './Details';
+import Details from './Details/Details';
 import GuessInput from './GuessInput';
 import ScoreBar from './ScoreBar';
 import type { Album } from '@prisma/client';
