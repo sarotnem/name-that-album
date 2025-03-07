@@ -1,15 +1,15 @@
-import type { Album } from '@prisma/client';
+import type { GameAlbum } from '@/types/album';
 import { devtools } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
 export type GameState = {
-  album: Album | null;
+  album: GameAlbum | null;
   score: number;
   lives: number;
 };
 
 export type GameActions = {
-  updateAlbum: (album: Album) => void;
+  updateAlbum: (album: GameAlbum) => void;
   decreaseScore: (amount: number) => void;
   loseLife: () => void;
 };
