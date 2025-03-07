@@ -1,4 +1,5 @@
 'use client';
+export const dynamic = 'force-dynamic';
 import { useGameStore } from '@/providers/game-store-provider';
 import AlbumCover from './AlbumCover';
 import Details from './Details/Details';
@@ -23,7 +24,7 @@ export default function Game({ album }: GameProps) {
   return (
     <div className="w-full max-w-4xl">
       <ScoreBar />
-      <div className="grid grid-cols-2 gap-6 items-start">
+      <div className="grid grid-cols-2 gap-6 items-center">
         <AlbumCover url={album.cover} />
         <Details />
       </div>
