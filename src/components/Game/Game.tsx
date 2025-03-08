@@ -4,16 +4,19 @@ import { useGameStore } from '@/providers/game-store-provider';
 import AlbumCover from './AlbumCover';
 import Details from './Details/Details';
 import GuessInput from './GuessInput';
-import ScoreBar from './ScoreBar';
-import type { Album } from '@prisma/client';
+import ScoreBar from './ScoreBar/ScoreBar';
 import { useEffect } from 'react';
+import type { GameAlbum } from '@/types/album';
 
 type GameProps = {
-  album: Album;
+  album: GameAlbum;
 };
 
 export default function Game({ album }: GameProps) {
-  const { album: storedAlbum, updateAlbum } = useGameStore(state => state);
+  const storedAlbum = useGameStore(state => state.album);
+  const updateAlbum = useGameStore(state => state.updateAlbum);
+  // TODO: Remove when guessing is implemented
+  const loseLife = useGameStore(state => state.loseLife);
 
   useEffect(() => {
     if (storedAlbum?.id !== album.id) {
@@ -23,6 +26,7 @@ export default function Game({ album }: GameProps) {
 
   return (
     <div className="w-full max-w-4xl">
+      <button className="bg-amber-500 hover:bg-amber-400 cursor-pointer rounded-2xl p-2 text-black" onClick={() => loseLife()}>Lose Life (remove)</button>
       <ScoreBar />
       <div className="grid grid-cols-2 gap-6 items-center">
         <AlbumCover url={album.cover} />

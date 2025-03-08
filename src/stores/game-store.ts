@@ -1,3 +1,4 @@
+import { GAME_CONFIG } from '@/lib/config';
 import type { GameAlbum } from '@/types/album';
 import { devtools } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
@@ -19,7 +20,7 @@ export type GameStore = GameState & GameActions;
 export const defaultInitState: GameState = {
   album: null,
   score: 100,
-  lives: 3,
+  lives: GAME_CONFIG.MAX_LIVES,
 };
 
 export const createGameStore = (
