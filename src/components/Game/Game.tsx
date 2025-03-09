@@ -1,12 +1,12 @@
 'use client';
-export const dynamic = 'force-dynamic';
 import { useGameStore } from '@/providers/game-store-provider';
 import AlbumCover from './AlbumCover';
 import Details from './Details/Details';
 import GuessInput from './GuessInput';
 import ScoreBar from './ScoreBar/ScoreBar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { GameAlbum } from '@/types/album';
+import Guesses from './Guesses';
 
 type GameProps = {
   album: GameAlbum;
@@ -15,8 +15,9 @@ type GameProps = {
 export default function Game({ album }: GameProps) {
   const storedAlbum = useGameStore(state => state.album);
   const updateAlbum = useGameStore(state => state.updateAlbum);
-  // TODO: Remove when guessing is implemented
   const loseLife = useGameStore(state => state.loseLife);
+  const addGuess = useGameStore(state => state.addGuess);
+  const [hasGivenWrongAnswer, setHasGivenWrongAnswer] = useState(false);
 
   useEffect(() => {
     if (storedAlbum?.id !== album.id) {
@@ -24,9 +25,32 @@ export default function Game({ album }: GameProps) {
     }
   }, [album, storedAlbum, updateAlbum]);
 
+  const handleGuess = (answer: string): void => {
+    if (!album.title) {
+      return;
+    }
+
+    const normalizedAnswer = answer.toLowerCase().trim();
+    const normalizedTitle = album.title.toLowerCase().trim();
+
+    if (normalizedAnswer.localeCompare(normalizedTitle) === 0) {
+      addGuess({ value: answer, isCorrect: true });
+      alert('You won!');
+      return;
+    }
+
+    loseLife();
+    addGuess({ value: answer, isCorrect: false });
+    setHasGivenWrongAnswer(true);
+    setTimeout(() => setHasGivenWrongAnswer(false), 500);
+  };
+
   return (
-    <div className="w-full max-w-4xl">
-      <button className="bg-amber-500 hover:bg-amber-400 cursor-pointer rounded-2xl p-2 text-black" onClick={() => loseLife()}>Lose Life (remove)</button>
+    <div className="w-full max-w-5xl">
+      Album:
+      {' '}
+      {storedAlbum?.title}
+      <br />
       <ScoreBar />
       <div className="grid grid-cols-2 gap-6 items-center">
         <AlbumCover url={album.cover} />
@@ -43,7 +67,8 @@ export default function Game({ album }: GameProps) {
       </div>
 
       <div className="flex flex-col gap-4 w-full mt-6">
-        <GuessInput />
+        <GuessInput onGuess={handleGuess} animateWrongAnswer={hasGivenWrongAnswer} />
+        <Guesses />
       </div>
     </div>
   );

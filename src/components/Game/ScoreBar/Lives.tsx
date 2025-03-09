@@ -12,7 +12,7 @@ export default function Lives() {
   useEffect(() => {
     if (lives < previousLives.current) {
       setAnimate(true);
-      const timeout = setTimeout(() => setAnimate(false), 300);
+      const timeout = setTimeout(() => setAnimate(false), 500);
 
       return () => clearTimeout(timeout);
     }
