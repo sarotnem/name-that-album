@@ -13,7 +13,7 @@ export default function Guesses() {
           <span
             key={`wrong_guess_${index}`}
             className={`
-                inline-flex items-center rounded-md px-3 py-1 text-sm font-medium ring-1 ring-inset 
+                animate-fadein inline-flex items-center rounded-md px-3 py-1 text-sm font-medium ring-1 ring-inset 
                 ${guess.isCorrect ? 'bg-green-800 text-green-200 ring-green-500/30' : 'bg-red-800 text-red-200 ring-red-500/30'}
               `}
           >

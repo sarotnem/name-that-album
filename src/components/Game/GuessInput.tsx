@@ -9,12 +9,17 @@ type GuessInputProps = {
 export default function GuessInput({ onGuess, animateWrongAnswer }: GuessInputProps) {
   const [answer, setAnswer] = useState('');
 
+  const handleGuess = () => {
+    onGuess(answer);
+    setAnswer('');
+  };
+
   return (
     <>
       <input
         value={answer}
         onChange={e => setAnswer(e.target.value)}
-        onKeyDown={e => answer.length && e.key === 'Enter' && onGuess(answer)}
+        onKeyDown={e => answer.length && e.key === 'Enter' && handleGuess()}
         type="text"
         placeholder="Guess the album..."
         className={`
@@ -28,7 +33,7 @@ export default function GuessInput({ onGuess, animateWrongAnswer }: GuessInputPr
           hover:bg-secondary disabled:bg-primary/20
         disabled:text-white/20 disabled:cursor-not-allowed
         "
-        onClick={() => onGuess(answer)}
+        onClick={() => handleGuess()}
         disabled={!answer.length}
       >
         Guess!
