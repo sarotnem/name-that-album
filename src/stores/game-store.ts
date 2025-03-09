@@ -8,6 +8,7 @@ export type GameState = {
   score: number;
   lives: number;
   guesses: Guess[];
+  pixelation: number;
 };
 
 export type GameActions = {
@@ -15,6 +16,7 @@ export type GameActions = {
   decreaseScore: (amount: number) => void;
   loseLife: () => void;
   addGuess: (guess: Guess) => void;
+  updatePixelation: (value: number) => void;
 };
 
 export type GameStore = GameState & GameActions;
@@ -24,6 +26,7 @@ export const defaultInitState: GameState = {
   score: 100,
   lives: GAME_CONFIG.MAX_LIVES,
   guesses: [],
+  pixelation: GAME_CONFIG.INIT_PIXELATION,
 };
 
 export const createGameStore = (
@@ -36,7 +39,8 @@ export const createGameStore = (
         updateAlbum: album => set(() => ({ album }), false, 'updateAlbum'),
         decreaseScore: amount => set(state => ({ score: state.score - amount }), false, 'decreaseScore'),
         loseLife: () => set(state => ({ lives: state.lives - 1 }), false, 'loseLife'),
-        addGuess: guess => set(state => ({ guesses: [...state.guesses, guess] })),
+        addGuess: guess => set(state => ({ guesses: [...state.guesses, guess] }), false, 'addGuess'),
+        updatePixelation: value => set(() => ({ pixelation: value }), false, 'updatePixelation'),
       }),
       { name: 'GameStore' },
     ),
