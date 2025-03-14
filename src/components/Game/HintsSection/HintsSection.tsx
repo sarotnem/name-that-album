@@ -1,3 +1,4 @@
+'use client';
 import { GAME_CONFIG } from '@/lib/config';
 import { useGameStore } from '@/providers/game-store-provider';
 import HintButton from './HintButton';

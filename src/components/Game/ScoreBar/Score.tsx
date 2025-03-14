@@ -1,3 +1,4 @@
+'use client';
 import { useGameStore } from '@/providers/game-store-provider';
 import { useState, useEffect } from 'react';
 

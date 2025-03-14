@@ -1,3 +1,4 @@
+'use client';
 import { useGameStore } from '@/providers/game-store-provider';
 
 export default function Guesses() {
