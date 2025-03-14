@@ -1,5 +1,5 @@
 import { GAME_CONFIG } from '@/lib/config';
-import type { GameAlbum, Guess } from '@/types/album';
+import type { GameAlbum, Guess } from '@/types';
 import { devtools } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 

@@ -1,7 +1,7 @@
 import Game from '@/components/Game/Game';
 import { prisma } from '@/lib/db';
 import { GameStoreProvider } from '@/providers/game-store-provider';
-import type { GameAlbum } from '@/types/album';
+import type { GameAlbum } from '@/types';
 
 export default async function GamePage() {
   async function getAlbum(): Promise<GameAlbum> {

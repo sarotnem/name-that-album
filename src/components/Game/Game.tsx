@@ -5,7 +5,7 @@ import Details from './Details/Details';
 import GuessInput from './GuessInput';
 import ScoreBar from './ScoreBar/ScoreBar';
 import { useEffect, useState } from 'react';
-import type { GameAlbum } from '@/types/album';
+import type { GameAlbum } from '@/types';
 import Guesses from './Guesses';
 import HintsSection from './HintsSection/HintsSection';
 
