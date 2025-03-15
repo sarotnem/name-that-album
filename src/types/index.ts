@@ -8,3 +8,5 @@ export type Guess = {
   value: string;
   isCorrect: boolean;
 };
+
+export type GameStatus = 'playing' | 'won' | 'lost';

@@ -1,5 +1,5 @@
 import { GAME_CONFIG } from '@/lib/config';
-import type { GameAlbum, Guess } from '@/types';
+import type { GameStatus, GameAlbum, Guess } from '@/types';
 import { devtools } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
@@ -9,6 +9,7 @@ export type GameState = {
   lives: number;
   guesses: Guess[];
   pixelation: number;
+  gameStatus: GameStatus;
 };
 
 export type GameActions = {
@@ -27,6 +28,7 @@ export const defaultInitState: GameState = {
   lives: GAME_CONFIG.MAX_LIVES,
   guesses: [],
   pixelation: GAME_CONFIG.INIT_PIXELATION,
+  gameStatus: 'playing',
 };
 
 export const createGameStore = (
@@ -36,10 +38,24 @@ export const createGameStore = (
     devtools(
       set => ({
         ...initState,
+        // Update the current album playing
         updateAlbum: album => set(() => ({ album }), false, 'updateAlbum'),
+        // Decrease the score by the passed amount
         decreaseScore: amount => set(state => ({ score: state.score - amount }), false, 'decreaseScore'),
-        loseLife: () => set(state => ({ lives: state.lives - 1 }), false, 'loseLife'),
-        addGuess: guess => set(state => ({ guesses: [...state.guesses, guess] }), false, 'addGuess'),
+        // Decrease the available lives by 1
+        loseLife: () => set((state) => {
+          const newLives = state.lives - 1;
+          return {
+            lives: state.lives - 1,
+            gameStatus: newLives === 0 ? 'lost' : state.gameStatus,
+          };
+        }, false, 'loseLife'),
+        // Add a guess to the list
+        addGuess: guess => set(state => ({
+          guesses: [...state.guesses, guess],
+          gameStatus: guess.isCorrect ? 'won' : state.gameStatus,
+        }), false, 'addGuess'),
+        // Update the pixelation value of the album
         updatePixelation: value => set(() => ({ pixelation: value }), false, 'updatePixelation'),
       }),
       { name: 'GameStore' },

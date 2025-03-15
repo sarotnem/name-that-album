@@ -1,6 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DetailValue from './DetailValue';
+import { useGameStore } from '@/providers/game-store-provider';
 
 type DetailProps = {
   label: string;
@@ -10,7 +11,14 @@ type DetailProps = {
 };
 
 export default function Detail({ label, value, cost, onReveal }: DetailProps) {
+  const isPlaying = useGameStore(state => state.gameStatus === 'playing');
   const [isRevealed, setIsRevealed] = useState(false);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      setIsRevealed(true);
+    }
+  }, [isPlaying]);
 
   const handleReveal = () => {
     if (!isRevealed) {

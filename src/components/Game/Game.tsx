@@ -18,6 +18,9 @@ export default function Game({ album }: GameProps) {
   const updateAlbum = useGameStore(state => state.updateAlbum);
   const loseLife = useGameStore(state => state.loseLife);
   const addGuess = useGameStore(state => state.addGuess);
+  const gameStatus = useGameStore(state => state.gameStatus);
+  const isPlaying = useGameStore(state => state.gameStatus === 'playing');
+  const resetGame = useGameStore(state => state.resetGame);
   const [hasGivenWrongAnswer, setHasGivenWrongAnswer] = useState(false);
 
   useEffect(() => {
@@ -36,7 +39,6 @@ export default function Game({ album }: GameProps) {
 
     if (normalizedAnswer.localeCompare(normalizedTitle) === 0) {
       addGuess({ value: answer, isCorrect: true });
-      alert('You won!');
       return;
     }
 
@@ -52,19 +54,40 @@ export default function Game({ album }: GameProps) {
       {' '}
       {storedAlbum?.title}
       <br />
+      Status:
+      {' '}
+      { gameStatus }
+      <br />
       <ScoreBar />
       <div className="grid grid-cols-2 gap-6 items-center">
         <AlbumCover url={album.cover} />
         <Details />
       </div>
 
-      <div className="flex gap-4 justify-center mt-6">
-        <HintsSection />
-      </div>
-
-      <div className="flex flex-col gap-4 w-full mt-6">
-        <GuessInput onGuess={handleGuess} animateWrongAnswer={hasGivenWrongAnswer} />
-        <Guesses />
+      <div className="flex flex-col gap-6 mt-6">
+        {isPlaying && (
+          <div className="flex justify-center gap-4">
+            <HintsSection />
+          </div>
+        )}
+        <div className="flex flex-col items-center gap-4 w-full">
+          {!isPlaying
+            ? (
+                <>
+                  <h2 className="text-center text-6xl font-black animate-fadein">{storedAlbum?.title}</h2>
+                  <button
+                    className="mt-4 w-50 bg-secondary text-white px-6 py-3 rounded-lg text-lg font-semibold transition cursor-pointer hover:bg-secondary/80"
+                    onClick={() => alert('not implemented')}
+                  >
+                    Play Again
+                  </button>
+                </>
+              )
+            : (
+                <GuessInput onGuess={handleGuess} animateWrongAnswer={hasGivenWrongAnswer} />
+              )}
+          <Guesses />
+        </div>
       </div>
     </div>
   );
