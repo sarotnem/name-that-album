@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import type { GameAlbum } from '@/types';
 import Guesses from './Guesses';
 import HintsSection from './HintsSection/HintsSection';
+import { useRouter } from 'next/navigation';
 
 type GameProps = {
   album: GameAlbum;
@@ -48,6 +49,12 @@ export default function Game({ album }: GameProps) {
     setTimeout(() => setHasGivenWrongAnswer(false), 500);
   };
 
+  const router = useRouter();
+  const handlePlayAgain = (): void => {
+    resetGame();
+    router.refresh();
+  };
+
   return (
     <div className="w-full max-w-5xl">
       Album:
@@ -77,7 +84,7 @@ export default function Game({ album }: GameProps) {
                   <h2 className="text-center text-6xl font-black animate-fadein">{storedAlbum?.title}</h2>
                   <button
                     className="mt-4 w-50 bg-secondary text-white px-6 py-3 rounded-lg text-lg font-semibold transition cursor-pointer hover:bg-secondary/80"
-                    onClick={() => alert('not implemented')}
+                    onClick={() => handlePlayAgain()}
                   >
                     Play Again
                   </button>

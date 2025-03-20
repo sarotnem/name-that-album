@@ -18,6 +18,7 @@ export type GameActions = {
   loseLife: () => void;
   addGuess: (guess: Guess) => void;
   updatePixelation: (value: number) => void;
+  resetGame: () => void;
 };
 
 export type GameStore = GameState & GameActions;
@@ -57,6 +58,9 @@ export const createGameStore = (
         }), false, 'addGuess'),
         // Update the pixelation value of the album
         updatePixelation: value => set(() => ({ pixelation: value }), false, 'updatePixelation'),
+        // Resets the game
+        resetGame: () => set(() => ({ ...defaultInitState }), false, 'resetGame'),
+
       }),
       { name: 'GameStore' },
     ),

@@ -16,8 +16,11 @@ export default function AlbumCover({ url }: AlbumCoverProps) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [image, setImage] = useState<HTMLImageElement | null>(null);
 
-  /** Preload the image and store it in state */
+  // Reset the state immediately when the URL changes
   useEffect(() => {
+    setIsImageLoaded(false);
+    setImage(null);
+
     const img = new Image();
     img.crossOrigin = 'Anonymous';
     img.src = url;
@@ -27,7 +30,7 @@ export default function AlbumCover({ url }: AlbumCoverProps) {
     };
   }, [url]);
 
-  /** Pixelate the image when it's loaded or when the pixelation changes */
+  // Pixelate the image when it's loaded or when the pixelation changes
   useEffect(() => {
     if (!canvasRef.current || !image || !isPlaying) return;
 
@@ -41,23 +44,35 @@ export default function AlbumCover({ url }: AlbumCoverProps) {
   return (
     <div className={`
       relative flex items-center justify-center bg-gray-700 rounded-lg w-full aspect-square 
-      shadow-lg overflow-hidden ${!isImageLoaded ? 'animate-pulse' : ''}
+      shadow-lg overflow-hidden transition-all duration-500
     `}
     >
+      {!isImageLoaded && (
+        <div className="absolute inset-0 bg-gray-600 animate-pulse rounded-lg"></div>
+      )}
+
       <canvas
         ref={canvasRef}
-        className={`w-full h-full rounded-lg absolute ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-full h-full rounded-lg absolute transition-opacity duration-500 
+          ${isPlaying && isImageLoaded ? 'opacity-100' : 'opacity-0'}
+        `}
         width={450}
         height={450}
       />
-      <NextImage
-        src={url}
-        alt="Album Cover"
-        width={1000}
-        height={1000}
-        className={`w-full h-full object-cover rounded-lg absolute transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
-        priority
-      />
+
+      {isImageLoaded && (
+        <NextImage
+          src={url}
+          alt="Album Cover"
+          width={1000}
+          height={1000}
+          className={`
+            w-full h-full object-cover rounded-lg absolute transition-opacity duration-500 
+            ${!isPlaying ? 'opacity-100' : 'opacity-0'}
+          `}
+          priority
+        />
+      )}
     </div>
   );
 }

@@ -11,14 +11,24 @@ type DetailProps = {
 };
 
 export default function Detail({ label, value, cost, onReveal }: DetailProps) {
-  const isPlaying = useGameStore(state => state.gameStatus === 'playing');
+  const gameStatus = useGameStore(state => state.gameStatus);
+  const isPlaying = gameStatus === 'playing';
+  const hasEnded = gameStatus === 'won' || gameStatus === 'lost';
   const [isRevealed, setIsRevealed] = useState(false);
 
+  // Hide detail when game is reset
   useEffect(() => {
-    if (!isPlaying) {
-      setIsRevealed(true);
+    if (isPlaying) {
+      setIsRevealed(false);
     }
   }, [isPlaying]);
+
+  // Reveal detail when game ended
+  useEffect(() => {
+    if (hasEnded) {
+      setIsRevealed(true);
+    }
+  }, [hasEnded]);
 
   const handleReveal = () => {
     if (!isRevealed) {
