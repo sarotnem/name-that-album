@@ -55,10 +55,11 @@ export const createGameStore = (
           return {
             lives: state.lives - 1,
             gameStatus: newLives === 0 ? 'lost' : state.gameStatus,
+            score: newLives === 0 ? 0 : state.score,
           };
         }, false, 'loseLife'),
         // Lose all lives and end the game
-        loseAllLives: () => set(() => ({ lives: 0, gameStatus: 'lost' }), false, 'loseAllLives'),
+        loseAllLives: () => set(() => ({ lives: 0, gameStatus: 'lost', score: 0 }), false, 'loseAllLives'),
         // Add a guess to the list
         addGuess: guess => set(state => ({
           guesses: [...state.guesses, guess],
