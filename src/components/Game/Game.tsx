@@ -11,6 +11,7 @@ import HintsSection from './HintsSection/HintsSection';
 import { useRouter } from 'next/navigation';
 import FiftyFifty from './FiftyFifty';
 import { isFuzzyMatch } from '@/utils/fuzzy-match';
+import WinCelebration from './WinCelebration';
 
 type GameProps = {
   album: GameAlbum;
@@ -67,6 +68,7 @@ export default function Game({ album, alternativeTitle }: GameProps) {
 
   return (
     <div className="w-full max-w-5xl">
+      { gameStatus === 'won' && <WinCelebration />}
       Album:
       {' '}
       {storedAlbum?.title}
