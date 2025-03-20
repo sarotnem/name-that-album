@@ -9,26 +9,30 @@ import type { GameAlbum } from '@/types';
 import Guesses from './Guesses';
 import HintsSection from './HintsSection/HintsSection';
 import { useRouter } from 'next/navigation';
+import FiftyFifty from './FiftyFifty';
 
 type GameProps = {
   album: GameAlbum;
+  alternativeTitle: string;
 };
 
-export default function Game({ album }: GameProps) {
+export default function Game({ album, alternativeTitle }: GameProps) {
   const storedAlbum = useGameStore(state => state.album);
   const updateAlbum = useGameStore(state => state.updateAlbum);
   const loseLife = useGameStore(state => state.loseLife);
+  const loseAllLives = useGameStore(state => state.loseAllLives);
   const addGuess = useGameStore(state => state.addGuess);
   const gameStatus = useGameStore(state => state.gameStatus);
   const isPlaying = useGameStore(state => state.gameStatus === 'playing');
   const resetGame = useGameStore(state => state.resetGame);
+  const hasUsed5050 = useGameStore(state => state.hasUsed5050);
   const [hasGivenWrongAnswer, setHasGivenWrongAnswer] = useState(false);
 
   useEffect(() => {
     if (storedAlbum?.id !== album.id) {
-      updateAlbum(album);
+      updateAlbum(album, alternativeTitle);
     }
-  }, [album, storedAlbum, updateAlbum]);
+  }, [album, alternativeTitle, storedAlbum, updateAlbum]);
 
   const handleGuess = (answer: string): void => {
     if (!album.title) {
@@ -37,14 +41,21 @@ export default function Game({ album }: GameProps) {
 
     const normalizedAnswer = answer.toLowerCase().trim();
     const normalizedTitle = album.title.toLowerCase().trim();
+    const isCorrect = normalizedAnswer.localeCompare(normalizedTitle) === 0;
 
-    if (normalizedAnswer.localeCompare(normalizedTitle) === 0) {
+    if (isCorrect) {
       addGuess({ value: answer, isCorrect: true });
       return;
     }
 
-    loseLife();
     addGuess({ value: answer, isCorrect: false });
+
+    if (hasUsed5050) {
+      loseAllLives();
+      return;
+    }
+
+    loseLife();
     setHasGivenWrongAnswer(true);
     setTimeout(() => setHasGivenWrongAnswer(false), 500);
   };
@@ -91,7 +102,9 @@ export default function Game({ album }: GameProps) {
                 </>
               )
             : (
-                <GuessInput onGuess={handleGuess} animateWrongAnswer={hasGivenWrongAnswer} />
+                !hasUsed5050
+                  ? <GuessInput onGuess={handleGuess} animateWrongAnswer={hasGivenWrongAnswer} />
+                  : <FiftyFifty onGuess={handleGuess} correctTitle={storedAlbum?.title || ''} />
               )}
           <Guesses />
         </div>
