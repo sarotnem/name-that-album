@@ -10,6 +10,7 @@ import Guesses from './Guesses';
 import HintsSection from './HintsSection/HintsSection';
 import { useRouter } from 'next/navigation';
 import FiftyFifty from './FiftyFifty';
+import { isFuzzyMatch } from '@/utils/fuzzy-match';
 
 type GameProps = {
   album: GameAlbum;
@@ -39,9 +40,7 @@ export default function Game({ album, alternativeTitle }: GameProps) {
       return;
     }
 
-    const normalizedAnswer = answer.toLowerCase().trim();
-    const normalizedTitle = album.title.toLowerCase().trim();
-    const isCorrect = normalizedAnswer.localeCompare(normalizedTitle) === 0;
+    const isCorrect = isFuzzyMatch(answer, album.title);
 
     if (isCorrect) {
       addGuess({ value: answer, isCorrect: true });
