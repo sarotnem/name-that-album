@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import FiftyFifty from './FiftyFifty';
 import { isFuzzyMatch } from '@/utils/fuzzy-match';
 import WinCelebration from './WinCelebration';
+import { motion } from 'framer-motion';
 
 type GameProps = {
   album: GameAlbum;
@@ -67,7 +68,12 @@ export default function Game({ album, alternativeTitle }: GameProps) {
   };
 
   return (
-    <div className="w-full max-w-5xl">
+    <motion.div
+      initial={{ opacity: 0, y: -20, scale: 0.7 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.5 }}
+      className="w-full max-w-5xl"
+    >
       { gameStatus === 'won' && <WinCelebration />}
       Album:
       {' '}
@@ -110,6 +116,6 @@ export default function Game({ album, alternativeTitle }: GameProps) {
           <Guesses />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
