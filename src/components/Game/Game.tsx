@@ -75,14 +75,6 @@ export default function Game({ album, alternativeTitle }: GameProps) {
       className="w-full max-w-5xl"
     >
       { gameStatus === 'won' && <WinCelebration />}
-      Album:
-      {' '}
-      {storedAlbum?.title}
-      <br />
-      Status:
-      {' '}
-      { gameStatus }
-      <br />
       <ScoreBar />
       <div className="grid grid-cols-2 gap-6 items-center">
         <AlbumCover url={album.cover} />

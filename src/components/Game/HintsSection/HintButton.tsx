@@ -21,7 +21,7 @@ export default function HintButton({ title, cost, disabled = false, onClick }: H
         (-
         {cost}
         {' '}
-        points)
+        pts)
       </span>
     </button>
   );
