@@ -52,7 +52,7 @@ DATABASE_URL="file:./dev.db"
 
 ### 4. Set Up the Database
 ```
-pnpm prisma migrate dev --name init
+pnpm prisma migrate dev
 ```
 This should migrate the database and seed the necessary data. If for any reason, seeding has failed you can run it with:
 ```
