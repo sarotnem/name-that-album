@@ -39,7 +39,7 @@ pnpm install
 ```
 
 ### 3. Configure Environment Variables
-Copy the `.env.example` file, rename it to `.env' and adjust the values:
+Copy the `.env.example` file, rename it to `.env` and adjust the values:
 ```
 DATABASE_URL=postgresql://<username>:<password>@localhost:5432/<your-database-name>?schema=public
 ```
